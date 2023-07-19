@@ -46,13 +46,15 @@ jobs:
     - name: Upgrade pip
       run: |
         python -m pip install --upgrade pip
-    - name: Install requirements.txt
-      if: ${{ matrix.setup-action == 'develop'}}
+    - name: Install requirements.txt and setup.py develop
+      if: ${{ matrix.setup-action == 'develop' }}
       run: |
         pip install -r requirements.txt
-    - name: Install CLI
+        python setup.py develop
+    - name: Use pip install 
+      if: ${{ matrix.setup-action == 'install' }}
       run: |
-        python setup.py ${{ matrix.setup-action }}
+        pip install .
     - name: Create commit in codecov
       run: |
         codecovcli create-commit -t ${{ secrets.CODECOV_TOKEN }} --git-service github
