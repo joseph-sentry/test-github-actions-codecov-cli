@@ -1,0 +1,54 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Build-and-Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  buildassets:
+    name: Build packages
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - os: macos-latest
+            env:
+              CFLAGS: '-arch arm64 -arch x86_64'
+            TARGET: macos
+            CMD_REQS: >
+              mkdir -p pip-packages && cd pip-packages && pip wheel --no-cache-dir -r ../requirements.txt && cd ..
+              pip install --no-deps --no-index --find-links=pip-packages pip-packages/*
+            CMD_BUILD: >
+              STATICCODECOV_LIB_PATH=$(find build/ -maxdepth 1 -type d -name 'lib.*' -print -quit | xargs -I {} sh -c "find {} -type f -name 'staticcodecov*' -print -quit | sed 's|^./||'") &&
+              pyinstaller --add-binary ${STATICCODECOV_LIB_PATH}:. --hidden-import staticcodecov_languages --target-arch universal2 -F codecov_cli/main.py &&
+              mv dist/main dist/codecovcli_macos &&
+              lipo -archs dist/codecovcli_macos | grep -v 'x86_64 arm64' >> /dev/null && exit 1
+            OUT_FILE_NAME: codecovcli_macos
+            ASSET_MIME: application/octet-stream
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+    - name: Install dependencies
+      run: |
+        ${{matrix.CMD_REQS}}
+        python setup.py build
+    - name: Install pyinstaller
+      run: pip install pyinstaller
+    - name: Build with pyinstaller for ${{matrix.TARGET}}
+      run: ${{matrix.CMD_BUILD}}
+    - name: upload artifact
+      uses: actions/upload-artifact@v3
+        name: macos-install
+        path: dist/codecovcli_macos
+
