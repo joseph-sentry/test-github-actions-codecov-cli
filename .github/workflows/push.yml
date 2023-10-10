@@ -49,6 +49,7 @@ jobs:
       run: ${{matrix.CMD_BUILD}}
     - name: upload artifact
       uses: actions/upload-artifact@v3
+      with:
         name: macos-install
         path: dist/codecovcli_macos
 
