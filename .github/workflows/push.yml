@@ -10,7 +10,7 @@ jobs:
 
   buildassets:
     name: Build packages
-    runs-on: 
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
