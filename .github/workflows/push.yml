@@ -10,40 +10,23 @@ jobs:
 
   buildassets:
     name: Build packages
-    runs-on: ${{ matrix.os }}
+    runs-on: 
     strategy:
       fail-fast: true
       matrix:
         include:
-          - os: windows-latest
-            TARGET: windows
-            CMD_REQS: >
-              pip install -r requirements.txt
-            CMD_BUILD: >
-              pyinstaller --add-binary "build\lib.win-amd64-cpython-311\staticcodecov_languages.cp311-win_amd64.pyd;." --hidden-import staticcodecov_languages -F codecov_cli\main.py &&
-              Copy-Item -Path ".\dist\main.exe" -Destination ".\dist\codecovcli_windows.exe"
-            OUT_FILE_NAME: codecovcli_windows.exe
-            ASSET_MIME: application/vnd.microsoft.portable-executable
+          - arch: linux/arm64
+          - arch: linux/x86_64
+    container:
+      image: python:3.11-alpine3.18
+      options: --platforms ${{ matrix.arch }}
 
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: true
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.11"
     - name: Install dependencies
       run: |
-        ${{matrix.CMD_REQS}}
-        python setup.py build
-    - name: Install pyinstaller
-      run: pip install pyinstaller
-    - name: Build with pyinstaller for ${{matrix.TARGET}}
-      run: ${{matrix.CMD_BUILD}}
-    - name: upload artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: macos-install
-        path: dist/codecovcli_macos
+        ls
+        uname -a
 
