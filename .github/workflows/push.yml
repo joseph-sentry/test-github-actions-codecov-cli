@@ -19,7 +19,7 @@ jobs:
           - arch: linux/x86_64
     container:
       image: python:3.11-alpine3.18
-      options: --platforms ${{ matrix.arch }}
+      options: --platform ${{ matrix.arch }}
 
     steps:
     - uses: actions/checkout@v3
