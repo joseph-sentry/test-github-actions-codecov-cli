@@ -26,6 +26,7 @@ jobs:
         exclude:
           - arch: x84_64
             distro: "python:3.11"
+            append: ""
     steps:
     - uses: actions/checkout@v4
       with:
