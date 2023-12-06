@@ -1,3 +1,4 @@
+#!/bin/sh
 apk add musl-dev build-base
 pip install -r requirements.txt
 pip install .
