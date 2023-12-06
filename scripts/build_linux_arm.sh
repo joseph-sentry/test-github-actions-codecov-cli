@@ -1,5 +1,4 @@
 #!/bin/sh
-echo $*
 apt install build-essential
 pip install -r requirements.txt
 pip install .
