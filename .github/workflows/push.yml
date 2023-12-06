@@ -17,12 +17,14 @@ jobs:
         distro: ["python:3.11-alpine3.18", "python:3.11"]
         include:
           - distro: "python:3.11-alpine3.18"
+            arch: arm64
+            append: alpine
+          - distro: "python:3.11-alpine3.18"
+            arch: x86_64
             append: alpine
           - distro: "python:3.11"
+            arch: arm64
             append: linux
-        exclude:
-          - distro: "python:3.11"
-            arch: x84_64
             
     steps:
     - uses: actions/checkout@v4
