@@ -27,6 +27,9 @@ jobs:
           - arch: x84_64
             distro: "python:3.11"
     steps:
+    - uses: actions/checkout@v4
+        with:
+          submodules: true
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
       with:
