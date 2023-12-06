@@ -11,7 +11,6 @@ jobs:
     name: Build assets - Alpine and ARM
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
       matrix:
         include:
           - distro: "python:3.11-alpine3.18"
