@@ -34,7 +34,7 @@ jobs:
     - name: Run in Docker
       run: |
         docker run \
-          -t \
+          -it \
           --rm \
           -v $(pwd):/${{ github.workspace }} \
           -w ${{ github.workspace }} \
