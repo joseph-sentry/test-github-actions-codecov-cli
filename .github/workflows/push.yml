@@ -25,7 +25,7 @@ jobs:
             append: ""
         exclude:
           - arch: x84_64
-            distro: python:3.11
+            distro: "python:3.11"
     steps:
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
