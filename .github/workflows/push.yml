@@ -17,11 +17,11 @@ jobs:
       fail-fast: true
       matrix:
         arch: [arm64, x86_64]
-        distro: [python:3.11-alpine3.18, python:3.11]
+        distro: ["python:3.11-alpine3.18", "python:3.11"]
         include:
-          - distro: python:3.11-alpine3.18
+          - distro: "python:3.11-alpine3.18"
             append: alpine
-          - distro: python:3.11
+          - distro: "python:3.11"
             append: ""
         exclude:
           - arch: x84_64
@@ -31,9 +31,7 @@ jobs:
       uses: docker/setup-qemu-action@v1
       with:
         platforms: ${{ matrix.arch }}
-
     - name: Run in Docker
-      if: ${{ matrix.os == "ubuntu" }}
       run: |
         docker run \
           --rm \
