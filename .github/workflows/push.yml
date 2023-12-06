@@ -22,11 +22,11 @@ jobs:
           - distro: "python:3.11-alpine3.18"
             append: alpine
           - distro: "python:3.11"
-            append: ""
+            append: linux
         exclude:
           - arch: x84_64
             distro: "python:3.11"
-            append: ""
+            append: "linux"
     steps:
     - uses: actions/checkout@v4
       with:
@@ -43,7 +43,7 @@ jobs:
           -w ${{ github.workspace }} \
           --platform linux/${{ matrix.arch }} \
           ${{ matrix.distro }} \
-          ./scripts/build_alpine_arm.sh ${{ matrix.append }}_${{ matrix.arch }}
+          ./scripts/build_${{ matrix.append }}_arm.sh ${{ matrix.append }}_${{ matrix.arch }}
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.3
       if: inputs.release == false
